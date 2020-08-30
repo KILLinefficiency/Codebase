@@ -1,0 +1,64 @@
+#/bin/bash
+
+if [ -e .codebase/branch ]; then
+	BRANCH=$(cat .codebase/branch)
+else
+	BRANCH="root"
+fi
+
+if [ "$1" == "construct" ]; then
+	mkdir .codebase
+	mkdir .codebase/root
+	echo "1" > .codebase/$BRANCH/save_count
+	echo "root" > .codebase/branch
+fi
+
+if [ "$1" == "div" ]; then
+	mkdir .codebase/$2
+	echo "1" > .codebase/$2/save_count
+fi
+
+if [ "$1" == "trigger" ]; then
+	echo "$2" > .codebase/branch
+fi
+
+if [ "$1" == "cut" ]; then
+	if [ "$2" != "root" ]; then
+		rm -rf .codebase/$2
+		echo "root" > .codebase/branch
+	else
+		echo "Cannot cut the root branch."
+	fi
+fi
+
+if [ "$1" == "destruct" ]; then
+	read -p "Are you sure you want to deconstruct the codebase? [y/N] " destruct_codebase
+	if [ -z $destruct_codebase ] || [ "$destruct_codebase" == "n" ] || [ "$destruct_codebase" == "N" ]; then
+		exit
+	elif [ "$destruct_codebase" == "y" ] || [ "$destruct_codebase" == "Y" ]; then
+		rm -rf .codebase
+	else
+		exit
+	fi
+fi
+
+if [ "$1" == "save" ]; then
+	SAVE=$(cat .codebase/$BRANCH/save_count)
+	cat $2 > .codebase/$BRANCH/$SAVE
+	echo "$2 $3" > .codebase/$BRANCH/$SAVE-info.txt
+	echo "$((SAVE + 1))" > .codebase/$BRANCH/save_count
+fi
+
+if [ "$1" == "goto" ]; then
+	cat .codebase/$BRANCH/$2 > $(awk '{print $1}' .codebase/$BRANCH/$2-info.txt)
+fi
+
+if [ "$1" == "history" ]; then
+	FILES=$(ls .codebase/$BRANCH | grep "info.txt" | wc -l)
+	echo ""
+	for saves in $(seq $FILES); do
+		echo -n "$saves --> "
+		cat .codebase/$BRANCH/$saves-info.txt
+		echo ""
+	done
+fi
