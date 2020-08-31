@@ -2,12 +2,16 @@
 
 n_args="${#@}"
 
-if [ $n_args -eq 0 ]; then
+if [ "$1" == "help" ]; then
 cat << HELP
 help here
 HELP
 fi
 
+if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/branch ] && [ -f .codebase/root/save_count ]); then
+	printf "This directory is not a Codebase.\nRun:\n\n\tcbase construct\n\nto create an empty Codebase.\n"
+	exit
+fi
 if [ -e .codebase/branch ]; then
 	BRANCH=$(cat .codebase/branch)
 else
