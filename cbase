@@ -8,7 +8,7 @@ help here
 HELP
 fi
 
-if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/branch ] && [ -f .codebase/root/save_count ]); then
+if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/branch ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
 	printf "This directory is not a Codebase.\nRun:\n\n\tcbase construct\n\nto create an empty Codebase.\n"
 	exit
 fi
