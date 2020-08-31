@@ -1,5 +1,13 @@
 #/bin/bash
 
+n_args="${#@}"
+
+if [ $n_args -eq 0 ]; then
+cat << HELP
+help here
+HELP
+fi
+
 if [ -e .codebase/branch ]; then
 	BRANCH=$(cat .codebase/branch)
 else
@@ -18,8 +26,23 @@ if [ "$1" == "div" ]; then
 	echo "1" > .codebase/$2/save_count
 fi
 
+if [ "$1" == "ndiv" ]; then
+	for divs in $(ls -F .codebase | grep "/"); do
+		if [ "$BRANCH/" == "$divs" ]; then
+			echo "--> $divs"
+		else
+			echo "    $divs"
+		fi
+	done
+fi
+
 if [ "$1" == "trigger" ]; then
-	echo "$2" > .codebase/branch
+	if [ -d .codebase/$2 ]; then
+		echo "$2" > .codebase/branch
+	else
+		echo "Division \"$2\" does not exist."
+	fi
+	echo "You are on \"$(cat .codebase/branch)\" now."
 fi
 
 if [ "$1" == "cut" ]; then
