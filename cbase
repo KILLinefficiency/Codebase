@@ -42,7 +42,7 @@ if [ "$1" == "trigger" ]; then
 	else
 		echo "Division \"$2\" does not exist."
 	fi
-	echo "You are on \"$(cat .codebase/branch)\" now."
+	echo "You are on \"$(cat .codebase/branch)\" division now."
 fi
 
 if [ "$1" == "cut" ]; then
@@ -57,7 +57,7 @@ if [ "$1" == "cut" ]; then
 			exit
 		fi
 	else
-		echo "Cannot cut the root branch."
+		echo "Cannot cut the \"root\" division."
 	fi
 fi
 
