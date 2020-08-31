@@ -17,13 +17,13 @@ fi
 if [ "$1" == "construct" ]; then
 	mkdir .codebase
 	mkdir .codebase/root
-	echo "1" > .codebase/$BRANCH/save_count
+	echo "1" > .codebase/root/save_count
 	echo "root" > .codebase/branch
 fi
 
 if [ "$1" == "div" ]; then
 	mkdir .codebase/$2
-	echo "1" > .codebase/$2/save_count
+	cp .codebase/$BRANCH/* .codebase/$2
 fi
 
 if [ "$1" == "ndiv" ]; then
