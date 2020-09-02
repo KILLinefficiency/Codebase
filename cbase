@@ -43,6 +43,11 @@ fi
 if [ "$1" == "trigger" ]; then
 	if [ -d .codebase/$2 ]; then
 		echo "$2" > .codebase/division
+		DIVISION=$(cat .codebase/division)
+		total_saves=$(($(cat .codebase/$2/save_count) - 1))
+		for switch_div in $(seq $total_saves); do
+			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
+		done
 	else
 		echo "Division \"$2\" does not exist."
 	fi
