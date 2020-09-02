@@ -8,31 +8,31 @@ help here
 HELP
 fi
 
-if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/branch ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
+if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/division ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
 	printf "This directory is not a Codebase.\nRun:\n\n\tcbase construct\n\nto create an empty Codebase.\n"
 	exit
 fi
-if [ -e .codebase/branch ]; then
-	BRANCH=$(cat .codebase/branch)
+if [ -e .codebase/division ]; then
+	DIVISION=$(cat .codebase/division)
 else
-	BRANCH="root"
+	DIVISION="root"
 fi
 
 if [ "$1" == "construct" ]; then
 	mkdir .codebase
 	mkdir .codebase/root
 	echo "1" > .codebase/root/save_count
-	echo "root" > .codebase/branch
+	echo "root" > .codebase/division
 fi
 
 if [ "$1" == "div" ]; then
 	mkdir .codebase/$2
-	cp .codebase/$BRANCH/* .codebase/$2
+	cp .codebase/$DIVISION/* .codebase/$2
 fi
 
 if [ "$1" == "ndiv" ]; then
 	for divs in $(ls -F .codebase | grep "/"); do
-		if [ "$BRANCH/" == "$divs" ]; then
+		if [ "$DIVISION/" == "$divs" ]; then
 			echo "--> $divs"
 		else
 			echo "    $divs"
@@ -42,11 +42,11 @@ fi
 
 if [ "$1" == "trigger" ]; then
 	if [ -d .codebase/$2 ]; then
-		echo "$2" > .codebase/branch
+		echo "$2" > .codebase/division
 	else
 		echo "Division \"$2\" does not exist."
 	fi
-	echo "You are on \"$(cat .codebase/branch)\" division now."
+	echo "You are on \"$(cat .codebase/division)\" division now."
 fi
 
 if [ "$1" == "cut" ]; then
@@ -56,7 +56,7 @@ if [ "$1" == "cut" ]; then
 			exit
 		elif [ "$cut_div" == "y" ] || [ "$cut_div" == "Y" ]; then
 			rm -rf .codebase/$2
-			echo "root" > .codebase/branch
+			echo "root" > .codebase/division
 		else
 			exit
 		fi
@@ -77,22 +77,22 @@ if [ "$1" == "destruct" ]; then
 fi
 
 if [ "$1" == "save" ]; then
-	SAVE=$(cat .codebase/$BRANCH/save_count)
-	cat $2 > .codebase/$BRANCH/$SAVE
-	echo "$2 $3" > .codebase/$BRANCH/$SAVE-info.txt
-	echo "$((SAVE + 1))" > .codebase/$BRANCH/save_count
+	SAVE=$(cat .codebase/$DIVISION/save_count)
+	cat $2 > .codebase/$DIVISION/$SAVE
+	echo "$2 $3" > .codebase/$DIVISION/$SAVE-info.txt
+	echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
 fi
 
 if [ "$1" == "goto" ]; then
-	cat .codebase/$BRANCH/$2 > $(awk '{print $1}' .codebase/$BRANCH/$2-info.txt)
+	cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
 fi
 
 if [ "$1" == "history" ]; then
-	FILES=$(ls .codebase/$BRANCH | grep "info.txt" | wc -l)
+	FILES=$(ls .codebase/$DIVISION | grep "info.txt" | wc -l)
 	echo ""
 	for saves in $(seq $FILES); do
 		echo -n "$saves --> "
-		cat .codebase/$BRANCH/$saves-info.txt
+		cat .codebase/$DIVISION/$saves-info.txt
 		echo ""
 	done
 fi
