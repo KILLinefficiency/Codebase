@@ -1,6 +1,8 @@
 #/bin/bash
 
-n_args="${#@}"
+if [ $(whoami) == "root" ]; then
+	printf "\nYou are running Codebase as the root user.\nAll the files will be own by the root user.\n\n"
+fi
 
 if [ "$1" == "help" ]; then
 cat << HELP
