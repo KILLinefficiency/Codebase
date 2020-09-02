@@ -1,7 +1,7 @@
 #/bin/bash
 
 if [ $(whoami) == "root" ]; then
-	printf "\nYou are running Codebase as the root user.\nAll the files will be own by the root user.\n\n"
+	printf "\nYou are running Codebase as the root user.\nAll the files will be owned by the root user.\n\n"
 fi
 
 if [ "$1" == "help" ]; then
