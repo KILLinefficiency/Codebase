@@ -11,7 +11,7 @@ HELP
 fi
 
 if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/division ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
-	printf "This directory is not a Codebase.\nRun:\n\n\tcbase construct\n\nto create an empty Codebase.\n"
+	printf "This directory is not a codebase.\nRun:\n\n\tcbase construct\n\nto create an empty codebase.\n"
 	exit
 fi
 if [ -e .codebase/division ]; then
@@ -21,15 +21,23 @@ else
 fi
 
 if [ "$1" == "construct" ]; then
-	mkdir .codebase
-	mkdir .codebase/root
-	echo "1" > .codebase/root/save_count
-	echo "root" > .codebase/division
+	if [ -d .codebase ]; then
+		printf "A codebase already exists.\nTo remove it use:\n\n\tcbase destruct\n\nAnd then create a new one using:\n\n\tcbase construct\n\n"
+	else
+		mkdir .codebase
+		mkdir .codebase/root
+		echo "1" > .codebase/root/save_count
+		echo "root" > .codebase/division
+	fi
 fi
 
 if [ "$1" == "div" ]; then
-	mkdir .codebase/$2
-	cp .codebase/$DIVISION/* .codebase/$2
+	if [ -d .codebase/$2 ]; then
+		printf "The division \"$2\" already exists.\nSwitch to it using:\n\n\tcbase trigger $2\n\n"
+	else
+		mkdir .codebase/$2
+		cp .codebase/$DIVISION/* .codebase/$2
+	fi
 fi
 
 if [ "$1" == "ndiv" ]; then
@@ -73,7 +81,11 @@ if [ "$1" == "cut" ]; then
 fi
 
 if [ "$1" == "smoosh" ]; then
-	cp .codebase/$DIVISION/* .codebase/$2
+	if [ -d .codebase/$2 ]; then
+		cp .codebase/$DIVISION/* .codebase/$2
+	else
+		printf "The division \"$2\" does not exist.\nCreate one using:\n\n\tcbase div $2\n\n"
+	fi
 fi
 
 if [ "$1" == "destruct" ]; then
@@ -88,14 +100,23 @@ if [ "$1" == "destruct" ]; then
 fi
 
 if [ "$1" == "save" ]; then
-	SAVE=$(cat .codebase/$DIVISION/save_count)
-	cat $2 > .codebase/$DIVISION/$SAVE
-	echo "$2 $3" > .codebase/$DIVISION/$SAVE-info.txt
-	echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
+	if [ -e $2 ]; then
+		SAVE=$(cat .codebase/$DIVISION/save_count)
+		cat $2 > .codebase/$DIVISION/$SAVE
+		echo "$2 $3" > .codebase/$DIVISION/$SAVE-info.txt
+		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
+	else
+		echo "The file \"$2\" does not exist."
+	fi
 fi
 
 if [ "$1" == "goto" ]; then
-	cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/"$2"-info.txt)
+	total_save_files=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
+	if [ $2 -le $total_save_files ]; then
+		cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
+	else
+		printf "The Save ID: $2 does not exist yet.\nThere are only $total_save_files ID(s) so far.\n"
+	fi
 fi
 
 if [ "$1" == "history" ]; then
