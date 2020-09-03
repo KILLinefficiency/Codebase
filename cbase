@@ -72,6 +72,10 @@ if [ "$1" == "cut" ]; then
 	fi
 fi
 
+if [ "$1" == "smoosh" ]; then
+	cp .codebase/$DIVISION/* .codebase/$2
+fi
+
 if [ "$1" == "destruct" ]; then
 	read -p "Are you sure you want to deconstruct the codebase? [y/N] " destruct_codebase
 	if [ -z $destruct_codebase ]; then
@@ -91,11 +95,11 @@ if [ "$1" == "save" ]; then
 fi
 
 if [ "$1" == "goto" ]; then
-	cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
+	cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/"$2"-info.txt)
 fi
 
 if [ "$1" == "history" ]; then
-	FILES=$(ls .codebase/$DIVISION | grep "info.txt" | wc -l)
+	FILES=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
 	echo ""
 	for saves in $(seq $FILES); do
 		echo -n "$saves --> "
