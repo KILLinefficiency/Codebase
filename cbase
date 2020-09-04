@@ -33,7 +33,7 @@ fi
 
 if [ "$1" == "div" ]; then
 	if [ -d .codebase/$2 ]; then
-		printf "\nThe division \e[01;34m$2\e[00;39m already exists.\nSwitch to it using:\n\n\t\e[01;32mcbase trigger $2\e[00;39m\n\n"
+		printf "\nThe division \e[01;36m$2\e[00;39m already exists.\nSwitch to it using:\n\n\t\e[01;32mcbase trigger $2\e[00;39m\n\n"
 	else
 		mkdir .codebase/$2
 		cp .codebase/$DIVISION/* .codebase/$2
@@ -59,14 +59,14 @@ if [ "$1" == "trigger" ]; then
 			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
 		done
 	else
-		echo -e "The division \e[01;34m$2\e[00;39m does not exist."
+		echo -e "The division \e[01;36m$2\e[00;39m does not exist."
 	fi
-	echo -e "You are on \e[01;34m$(cat .codebase/division)\e[00;39m division now."
+	echo -e "You are on \e[01;36m$(cat .codebase/division)\e[00;39m division now."
 fi
 
 if [ "$1" == "cut" ]; then
 	if [ "$2" != "root" ]; then
-		read -p "Are you sure you want to cut \"$2\"? [y/N] " cut_div
+		read -p "Are you sure you want to cut \"$2\" division? [y/N] " cut_div
 		if [ -z $cut_div ]; then
 			exit
 		elif [ "$cut_div" == "y" ] || [ "$cut_div" == "Y" ]; then
@@ -76,7 +76,7 @@ if [ "$1" == "cut" ]; then
 			exit
 		fi
 	else
-		echo "Cannot cut the \"root\" division."
+		echo -e "Cannot cut the \e[01;36mroot\e[00;39m division."
 	fi
 fi
 
@@ -84,12 +84,12 @@ if [ "$1" == "smoosh" ]; then
 	if [ -d .codebase/$2 ]; then
 		cp .codebase/$DIVISION/* .codebase/$2
 	else
-		printf "The division \"$2\" does not exist.\nCreate one using:\n\n\tcbase div $2\n\n"
+		printf "The division \e[01;36m$2\e[00;39m does not exist.\nCreate one using:\n\n\t\e[01;32mcbase div $2\e[00;39m\n\n"
 	fi
 fi
 
 if [ "$1" == "destruct" ]; then
-	read -p "Are you sure you want to deconstruct the codebase? [y/N] " destruct_codebase
+	read -p "Are you sure you want to deconstruct the entire codebase? [y/N] " destruct_codebase
 	if [ -z $destruct_codebase ]; then
 		exit
 	elif [ "$destruct_codebase" == "y" ] || [ "$destruct_codebase" == "Y" ]; then
@@ -106,7 +106,7 @@ if [ "$1" == "save" ]; then
 		echo "$2 $3" > .codebase/$DIVISION/$SAVE-info.txt
 		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
 	else
-		echo "The file \"$2\" does not exist."
+		echo -e "The file \e[01;34m$2\e[00;39m does not exist."
 	fi
 fi
 
@@ -115,16 +115,15 @@ if [ "$1" == "goto" ]; then
 	if [ $2 -le $total_save_files ]; then
 		cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
 	else
-		printf "The Save ID: $2 does not exist yet.\nThere are only $total_save_files ID(s) so far.\n"
+		printf "The Save ID: \e[01;35m$2\e[00;39m does not exist yet.\nThere are only \e[01;35m$total_save_files\e[00;39m ID(s) so far.\n"
 	fi
 fi
 
 if [ "$1" == "history" ]; then
 	FILES=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
-	echo ""
+	printf "\n\e[01;32mSave History:\e[00;39m\n\n"
 	for saves in $(seq $FILES); do
-		echo -n "$saves --> "
-		cat .codebase/$DIVISION/$saves-info.txt
-		echo ""
+		printf "  \e[01;35m$saves\e[01;31m -->\e[00;39m "
+		printf "\e[01;39m$(cat .codebase/$DIVISION/$saves-info.txt)\e[00;39m\n\n"
 	done
 fi
