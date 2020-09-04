@@ -43,9 +43,9 @@ fi
 if [ "$1" == "ndiv" ]; then
 	for divs in $(ls -F .codebase | grep "/"); do
 		if [ "$DIVISION/" == "$divs" ]; then
-			echo "--> $divs"
+			echo -e "\e[01;31m-->\e[01;36m $divs\e[00;39m"
 		else
-			echo "    $divs"
+			echo -e "    \e[01;39m$divs\e[00;39m"
 		fi
 	done
 fi
@@ -103,7 +103,7 @@ if [ "$1" == "save" ]; then
 	if [ -e $2 ]; then
 		SAVE=$(cat .codebase/$DIVISION/save_count)
 		cat $2 > .codebase/$DIVISION/$SAVE
-		echo "$2 $3" > .codebase/$DIVISION/$SAVE-info.txt
+		echo -e "$2 : $3" > .codebase/$DIVISION/$SAVE-info.txt
 		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
 	else
 		echo -e "The file \e[01;34m$2\e[00;39m does not exist."
