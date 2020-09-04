@@ -1,7 +1,7 @@
 #/bin/bash
 
 if [ $(whoami) == "root" ]; then
-	printf "\nYou are running Codebase as the root user.\nAll the files will be owned by the root user.\n\n"
+	printf "\nYou are running Codebase as the \e[01;33mroot\e[00;39m user.\nAll the files will be owned by the \e[01;33mroot\e[00;39m user.\n\n"
 fi
 
 if [ "$1" == "help" ]; then
@@ -11,7 +11,7 @@ HELP
 fi
 
 if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/division ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
-	printf "This directory is not a codebase.\nRun:\n\n\tcbase construct\n\nto create an empty codebase.\n"
+	printf "This directory is not a codebase.\nRun:\n\n\t\e[01;32mcbase construct\e[00;39m\n\nto create an empty codebase.\n"
 	exit
 fi
 if [ -e .codebase/division ]; then
@@ -22,7 +22,7 @@ fi
 
 if [ "$1" == "construct" ]; then
 	if [ -d .codebase ]; then
-		printf "A codebase already exists.\nTo remove it use:\n\n\tcbase destruct\n\nAnd then create a new one using:\n\n\tcbase construct\n\n"
+		printf "A codebase already exists.\nTo remove it use:\n\n\t\e[01;32mcbase destruct\e[00;39m\n\nAnd then create a new one using:\n\n\t\e[01;32mcbase construct\e[0039m\n\n"
 	else
 		mkdir .codebase
 		mkdir .codebase/root
@@ -33,7 +33,7 @@ fi
 
 if [ "$1" == "div" ]; then
 	if [ -d .codebase/$2 ]; then
-		printf "The division \"$2\" already exists.\nSwitch to it using:\n\n\tcbase trigger $2\n\n"
+		printf "\nThe division \e[01;34m$2\e[00;39m already exists.\nSwitch to it using:\n\n\t\e[01;32mcbase trigger $2\e[00;39m\n\n"
 	else
 		mkdir .codebase/$2
 		cp .codebase/$DIVISION/* .codebase/$2
@@ -59,9 +59,9 @@ if [ "$1" == "trigger" ]; then
 			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
 		done
 	else
-		echo "Division \"$2\" does not exist."
+		echo -e "The division \e[01;34m$2\e[00;39m does not exist."
 	fi
-	echo "You are on \"$(cat .codebase/division)\" division now."
+	echo -e "You are on \e[01;34m$(cat .codebase/division)\e[00;39m division now."
 fi
 
 if [ "$1" == "cut" ]; then
