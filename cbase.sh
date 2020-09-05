@@ -53,9 +53,9 @@ fi
 if [ "$1" == "ndiv" ]; then
 	for divs in $(ls -F .codebase | grep "/"); do
 		if [ "$DIVISION/" == "$divs" ]; then
-			echo -e "${RED}-->${CYAN} $divs${DEFAULT}"
+			echo -e "${RED}-->${CYAN} ${divs//'/'/''}${DEFAULT}"
 		else
-			echo -e "    ${DEFAULT_BOLD}$divs${DEFAULT}"
+			echo -e "    ${DEFAULT_BOLD}${divs//'/'/''}${DEFAULT}"
 		fi
 	done
 fi
