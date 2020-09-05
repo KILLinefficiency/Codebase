@@ -1,7 +1,17 @@
 #/bin/bash
 
+DEFAULT="\e[00;39m"
+DEFAULT_BOLD="\e[01;39m"
+
+RED="\e[01;31m"
+GREEN="\e[01;32m"
+YELLOW="\e[01;33m"
+BLUE="\e[01;34m"
+MAGENTA="\e[01;35m"
+CYAN="\e[01;36m"
+
 if [ $(whoami) == "root" ]; then
-	printf "\nYou are running Codebase as the \e[01;33mroot\e[00;39m user.\nAll the files will be owned by the \e[01;33mroot\e[00;39m user.\n\n"
+	printf "\nYou are running Codebase as the ${YELLOW}root${DEFAULT} user.\nAll the files will be owned by the ${YELLOW}root${DEFAULT} user.\n\n"
 fi
 
 if [ "$1" == "help" ]; then
@@ -11,7 +21,7 @@ HELP
 fi
 
 if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/division ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
-	printf "This directory is not a codebase.\nRun:\n\n\t\e[01;32mcbase construct\e[00;39m\n\nto create an empty codebase.\n"
+	printf "This directory is not a codebase.\nRun:\n\n\t${GREEN}cbase construct${DEFAULT}\n\nto create an empty codebase.\n"
 	exit
 fi
 if [ -e .codebase/division ]; then
@@ -22,7 +32,7 @@ fi
 
 if [ "$1" == "construct" ]; then
 	if [ -d .codebase ]; then
-		printf "A codebase already exists.\nTo remove it use:\n\n\t\e[01;32mcbase destruct\e[00;39m\n\nAnd then create a new one using:\n\n\t\e[01;32mcbase construct\e[0039m\n\n"
+		printf "A codebase already exists.\nTo remove it use:\n\n\t${GREEN}cbase destruct${DEFAULT}\n\nAnd then create a new one using:\n\n\t${GREEN}cbase construct\e[0039m\n\n"
 	else
 		mkdir .codebase
 		mkdir .codebase/root
@@ -33,7 +43,7 @@ fi
 
 if [ "$1" == "div" ]; then
 	if [ -d .codebase/$2 ]; then
-		printf "\nThe division \e[01;36m$2\e[00;39m already exists.\nSwitch to it using:\n\n\t\e[01;32mcbase trigger $2\e[00;39m\n\n"
+		printf "\nThe division ${CYAN}$2${DEFAULT} already exists.\nSwitch to it using:\n\n\t${GREEN}cbase trigger $2${DEFAULT}\n\n"
 	else
 		mkdir .codebase/$2
 		cp .codebase/$DIVISION/* .codebase/$2
@@ -43,9 +53,9 @@ fi
 if [ "$1" == "ndiv" ]; then
 	for divs in $(ls -F .codebase | grep "/"); do
 		if [ "$DIVISION/" == "$divs" ]; then
-			echo -e "\e[01;31m-->\e[01;36m $divs\e[00;39m"
+			echo -e "${RED}-->${CYAN} $divs${DEFAULT}"
 		else
-			echo -e "    \e[01;39m$divs\e[00;39m"
+			echo -e "    ${DEFAULT_BOLD}$divs${DEFAULT}"
 		fi
 	done
 fi
@@ -59,9 +69,9 @@ if [ "$1" == "trigger" ]; then
 			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
 		done
 	else
-		echo -e "The division \e[01;36m$2\e[00;39m does not exist."
+		echo -e "The division ${CYAN}$2${DEFAULT} does not exist."
 	fi
-	echo -e "You are on \e[01;36m$(cat .codebase/division)\e[00;39m division now."
+	echo -e "You are on ${CYAN}$(cat .codebase/division)${DEFAULT} division now."
 fi
 
 if [ "$1" == "cut" ]; then
@@ -76,7 +86,7 @@ if [ "$1" == "cut" ]; then
 			exit
 		fi
 	else
-		echo -e "Cannot cut the \e[01;36mroot\e[00;39m division."
+		echo -e "Cannot cut the ${CYAN}root${DEFAULT} division."
 	fi
 fi
 
@@ -84,7 +94,7 @@ if [ "$1" == "smoosh" ]; then
 	if [ -d .codebase/$2 ]; then
 		cp .codebase/$DIVISION/* .codebase/$2
 	else
-		printf "The division \e[01;36m$2\e[00;39m does not exist.\nCreate one using:\n\n\t\e[01;32mcbase div $2\e[00;39m\n\n"
+		printf "The division ${CYAN}$2${DEFAULT} does not exist.\nCreate one using:\n\n\t${GREEN}cbase div $2${DEFAULT}\n\n"
 	fi
 fi
 
@@ -106,7 +116,7 @@ if [ "$1" == "save" ]; then
 		echo -e "$2 : $3" > .codebase/$DIVISION/$SAVE-info.txt
 		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
 	else
-		echo -e "The file \e[01;34m$2\e[00;39m does not exist."
+		echo -e "The file ${BLUE}$2${DEFAULT} does not exist."
 	fi
 fi
 
@@ -115,15 +125,15 @@ if [ "$1" == "goto" ]; then
 	if [ $2 -le $total_save_files ]; then
 		cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
 	else
-		printf "The Save ID: \e[01;35m$2\e[00;39m does not exist yet.\nThere are only \e[01;35m$total_save_files\e[00;39m ID(s) so far.\n"
+		printf "The Save ID: ${MAGENTA}$2${DEFAULT} does not exist yet.\nThere are only ${MAGENTA}$total_save_files${DEFAULT} ID(s) so far.\n"
 	fi
 fi
 
 if [ "$1" == "history" ]; then
 	FILES=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
-	printf "\n\e[01;32mSave History:\e[00;39m\n\n"
+	printf "\n${GREEN}Save History:${DEFAULT}\n\n"
 	for saves in $(seq $FILES); do
-		printf "  \e[01;35m$saves\e[01;31m -->\e[00;39m "
-		printf "\e[01;39m$(cat .codebase/$DIVISION/$saves-info.txt)\e[00;39m\n\n"
+		printf "  ${MAGENTA}$saves${RED} -->${DEFAULT} "
+		printf "${DEFAULT_BOLD}$(cat .codebase/$DIVISION/$saves-info.txt)${DEFAULT}\n\n"
 	done
 fi
