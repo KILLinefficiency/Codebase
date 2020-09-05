@@ -82,6 +82,7 @@ if [ "$1" == "cut" ]; then
 		elif [ "$cut_div" == "y" ] || [ "$cut_div" == "Y" ]; then
 			rm -rf .codebase/$2
 			echo "root" > .codebase/division
+			echo -e "You are on ${CYAN}root${DEFAULT} division now."
 		else
 			exit
 		fi
@@ -133,7 +134,6 @@ if [ "$1" == "history" ]; then
 	FILES=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
 	printf "\n${GREEN}Save History:${DEFAULT}\n\n"
 	for saves in $(seq $FILES); do
-		printf "  ${MAGENTA}$saves${RED} -->${DEFAULT} "
-		printf "${DEFAULT_BOLD}$(cat .codebase/$DIVISION/$saves-info.txt)${DEFAULT}\n\n"
+		printf "  ${MAGENTA}$saves${RED} --> ${DEFAULT_BOLD}$(cat .codebase/$DIVISION/$saves-info.txt)${DEFAULT}\n\n"
 	done
 fi
