@@ -16,12 +16,35 @@ fi
 
 if [ "$1" == "help" ]; then
 cat << HELP
-help here
+
+Codebase is a Source Control Management tool.
+There is no network activity on Codebase.
+
+Codebase commands and usage:
+
+00] help : shows help (this message).
+
+01] construct : makes an empty codebase in the current working directory.
+02] destruct : removes the existing codebase from the current working directory.
+
+03] save <file_name> <optional_save_message> : saves the file in the root division with a unique Save ID and a save message if given.
+04] history : displays the history of all the saves with Save IDs and save messages.
+05] goto <save_id> : goes back to the save specified by the Save ID.
+
+06] div <div_name> : creates a new division.
+07] ndiv : displays the list of divisions and the active division.
+08] trigger <div_name> : switches to the specified division.
+09] smoosh <div_name> : smooshes the active division with the specified divison.
+10] cut <div_name> : removes the specified division from the codebase.
+
+A fun and experimental project by Shreyas Sable.
+https://www.github.com/KILLinefficiency/Codebase
+
 HELP
 fi
 
 if !([ -d .codebase ] && [ -d .codebase/root ] && [ -f .codebase/division ] && [ -f .codebase/root/save_count ] || [ "$1" == "construct" ]); then
-	printf "This directory is not a codebase.\nRun:\n\n\t${GREEN}cbase construct${DEFAULT}\n\nto create an empty codebase.\n"
+	printf "\nThis directory is not a codebase.\nRun:\n\n\t${GREEN}cbase construct${DEFAULT}\n\nto create an empty codebase.\n"
 	exit
 fi
 if [ -e .codebase/division ]; then
