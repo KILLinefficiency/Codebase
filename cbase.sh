@@ -18,7 +18,7 @@ if [ "$1" == "help" ]; then
 cat << HELP
 
 Codebase is a Source Control Management tool.
-There is no network activity on Codebase.
+There is no network activity over Codebase.
 
 Codebase commands and usage:
 
