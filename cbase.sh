@@ -85,9 +85,14 @@ fi
 
 if [ "$1" == "trigger" ]; then
 	if [ -d .codebase/$2 ]; then
+		PREVIOUS_DIV=$(cat .codebase/division)
+		previous_div_total_saves=$(($(cat .codebase/$PREVIOUS_DIV/save_count) - 1))
 		echo "$2" > .codebase/division
 		DIVISION=$(cat .codebase/division)
 		total_saves=$(($(cat .codebase/$2/save_count) - 1))
+		for kill_div in $(seq $previous_div_total_saves); do
+			rm -f $(awk '{print $1}' .codebase/$PREVIOUS_DIV/"$kill_div"-info.txt)
+		done
 		for switch_div in $(seq $total_saves); do
 			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
 		done
