@@ -114,7 +114,7 @@ Multiple saves for multiple files can be made.
 
 All the saves made in the current division of your codebase can be seen by using ``history``.
 
-Using ``history``:;
+Using ``history``:
 ```
 $ cbase history
 ```
