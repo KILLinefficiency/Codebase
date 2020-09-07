@@ -61,6 +61,7 @@ if [ "$1" == "construct" ]; then
 		mkdir .codebase/root
 		echo "1" > .codebase/root/save_count
 		echo "root" > .codebase/division
+		echo -e "Constructed an empty codebase at ${GREEN}$(pwd)${DEFAULT}"
 	fi
 fi
 
@@ -159,7 +160,7 @@ if [ "$1" == "goto" ]; then
 fi
 
 if [ "$1" == "history" ]; then
-	FILES=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
+	FILES=$(($(cat .codebase/$DIVISION/save_count) - 1))
 	printf "\n${GREEN}Save History:${DEFAULT}\n\n"
 	for saves in $(seq $FILES); do
 		printf "  ${MAGENTA}$saves${RED} --> ${DEFAULT_BOLD}$(cat .codebase/$DIVISION/$saves-info.txt)${DEFAULT}\n\n"
