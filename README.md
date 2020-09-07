@@ -22,6 +22,7 @@ The ``cbase.sh`` file in the repository is the main file containing all the code
 There's also an ``install.sh`` file to automate the setting up process. ``install.sh`` makes a directory ``~/.CB`` copies ``cbase.sh`` to ``~/.CB`` as ``cbase`` and adds that directory to the PATH variable.
 
 You can also setup Codebase without using ``install.sh``:
+
 1] Copy ``cbase.sh`` as ``cbase`` because it's inconvinient to type ``.sh`` everytime you write ``cbase``.
 ```
 $ cp cbase.sh cbase
