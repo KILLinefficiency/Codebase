@@ -10,6 +10,11 @@ BLUE="\e[01;34m"
 MAGENTA="\e[01;35m"
 CYAN="\e[01;36m"
 
+if [ -z $(which bash) ]; then
+	echo -e "Codebase requires ${GREEN}/bin/bash${DEFAULT} to run and was not found."
+	exit
+fi
+
 if [ $(whoami) == "root" ]; then
 	printf "\nYou are running Codebase as the ${YELLOW}root${DEFAULT} user.\nAll the files will be owned by the ${YELLOW}root${DEFAULT} user.\n\n"
 fi
