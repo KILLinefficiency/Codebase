@@ -77,6 +77,8 @@ Using ``construct``:
 $ cbase construct
 ```
 
+The codebase constructed is limited to the current working directory only. A directory inside your project directory would require a separated codebase.
+
 #### destruct
 
 ``destruct`` will remove the existing codebase from the current working directory.U
@@ -111,6 +113,8 @@ $ cbase save file.py "a hello to the world"
 This will save the snapshot of the file ``hello.py`` in the directory's codebase.
 
 Multiple saves for multiple files can be made.
+
+You cannot save directories.
 
 #### history
 
@@ -257,7 +261,92 @@ $ cbase ndiv
 
 The arrow, ``-->`` points to the currently active division.
 
+#### trigger
+
+``trigger`` switches you from one division to another.
+
+Using ``trigger``:
+```
+$ cbase trigger <division_name>
+```
+
+Like,
+```
+$ cbase ndiv
+    batman
+    feature
+--> root
+
+$ cbase trigger feature
+You are on feature division now.
+
+$ cbase ndiv
+    batman
+--> feature
+    root
+
+$ cbase trigger batman
+You are on batman division now.
+
+$ cbase ndiv
+--> batman
+    feature
+    root
+```
+
+After triggeing to another division, all the saves will be made to that division only, keeping the ``root`` division clean.
+
 #### smoosh
+
+The divisions made can be smooshed together. It means that, changes to your code from the active division can be brought over to any other division (including ``root``).
+
+Using ``smoosh``:
+```
+$ cbase smoosh <division_name>
+```
+
+This will smoosh the current active division withe the specified division.
+
+Like,
+```
+$ echo "print([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])" > numbers.py
+
+$ cbase save numbers.py "0 to 10"
+
+$ cat numberrs.py
+print([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+$ cbase div update
+
+$ cbase ndiv
+--> root
+    update
+
+$ cbase trigger update
+You are on update division now.
+
+$ cbase ndiv
+    root
+--> update
+
+$ echo "print(list(range(0, 11)))" > numbers.py
+
+$ cbase save numbers.py "0 to 10 with range()"
+
+$ cbase smoosh root
+
+$ cbase trigger root
+You are on root division now.
+
+$ cbase ndiv
+--> root
+    update
+
+$ cat numbers.py
+print(list(range(0, 11)))
+```
+
+Here the ``numbers.py`` file from the ``root`` division was modified in the ``update`` division. The ``update`` division was then smooshed with the ``root`` division. This resulted into applying the changes from the ``update`` division to the ``root`` division so that the ``numbers.py`` file from both division become same everywhere.
 
 #### cut
 
