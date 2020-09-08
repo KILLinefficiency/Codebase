@@ -156,7 +156,7 @@ if [ "$1" == "save" ]; then
 fi
 
 if [ "$1" == "goto" ]; then
-	total_save_files=$(ls .codebase/$DIVISION/*-info.txt | wc -l)
+	total_save_files=$(($(cat .codebase/$DIVISION/save_count) - 1))
 	if [ $2 -le $total_save_files ]; then
 		cat .codebase/$DIVISION/$2 > $(awk '{print $1}' .codebase/$DIVISION/$2-info.txt)
 	else
