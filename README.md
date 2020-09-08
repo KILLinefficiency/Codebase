@@ -9,9 +9,9 @@ There is no network activity over Codebase which means that all the changes and 
 Any directory can be made into an empty codebase. Codebase allows you make and delete codebases (repositories), save the changes made to the files, go back to the previous ones, show the history of changes, make divisions (branches), trigger (switch) divisions, smoosh (merge) divisions and to cut them out.
 
 ### Getting Codebase
-Codebase can be clone via ``git``:
+Codebase can be cloned via ``git``:
 ```
-git clone https://www.github.com/KILLinefficiency/Codebase
+git clone https://www.github.com/KILLinefficiency/Codebase.git
 ```
 ### Requirements:
 Since Codebase is written in Bash Script, ``bash`` is an important requirement. Codebase also requies common Linux tools like ``ls``, ``cat``, ``awk``, etc.
