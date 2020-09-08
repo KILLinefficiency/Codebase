@@ -256,3 +256,28 @@ $ cbase ndiv
 ```
 
 The arrow, ``-->`` points to the currently active division.
+
+#### smoosh
+
+#### cut
+
+``cut`` deletes the specified division from the codebase.
+
+Using ``cut``:
+```
+$ cbase cut <division_name>
+```
+
+Like,
+```
+$ cbase ndiv
+    batman
+--> root
+
+$ cbase cut batman
+Are you sure you want to cut "batman" division? [y/N] y
+You are on root division now.
+
+$ cbase ndiv
+--> root
+```
