@@ -101,8 +101,10 @@ $ cbase save <file_name> <optional_save_message>
 Like:
 ```
 $ echo "print('Hello World')" > hello.py
+
 $ ls
 hello.py
+
 $ cbase save file.py "a hello to the world"
 ```
 
@@ -123,6 +125,7 @@ Like:
 ```
 $ ls
 hello.py
+
 $ cbase histoy
 
 Save History:
@@ -136,9 +139,12 @@ Here, ``1`` is the Save ID, ``hello.py`` is the file saved and ``a hello to the 
 ```
 $ cat hello.py
 print('Hello World')
+
 $ echo "print('Hello\nWorld')" > hello.py
+
 $ cat hello.py
 print('Hello\nWorld')
+
 $ cbase save hello.py "added a new line"
 
 Save History:
@@ -150,6 +156,7 @@ Save History:
 ```
 
 #### goto
+
 ``goto`` is used to go back to a previously made save. ``goto`` requires only a Save ID.
 
 Using ``goto``:
@@ -160,7 +167,9 @@ $ cbase goto <save_id>
 Let's make one more save:
 ```
 $ echo "print('Hello World. How are you?')" > hello.py
+
 $ cbase save hello.py "greet and ask"
+
 $ cbase history
 
 Save History:
@@ -183,10 +192,14 @@ Like:
 ```
 $ cat hello.py
 print('Hello World. How are you?')
+
 $ cbase goto 2
+
 $ cat hello.py
 print('Hello\nWorld')
+
 $ cbase goto 1
+
 $ cat hello.py
 print('Hello World')
 ```
@@ -196,6 +209,50 @@ The file ``hello.py`` was reverted back to a previous save, save ``2`` and then 
 The file ``hello.py`` can be brought to the latest save, save ``3`` too.
 ```
 $ cbase goto 3
+
 $ cat hello.py
 print('Hello World. How are you?')
 ```
+
+#### div
+
+``div`` creates a new division. A division is just another copy of your code, or in other terms, it's a branch.
+
+There is only one default division callled ``root`` in your codebase. But more divisions can be created.
+
+Using ``div``:
+```
+$ cbase div <division_name>
+```
+
+Like,
+```
+$ cbase div feature
+```
+This will create a new division named ``feature``.
+
+#### ndiv
+
+``ndiv`` helps you to see the total number of divisions and the current working division.
+
+Using ``ndiv``:
+```
+$ cbase ndiv
+```
+
+Like,
+```
+$ cbase ndiv
+--> root
+
+$ cbase div feature
+
+$ cbase div batman
+
+$ cbase ndiv
+    batman
+    feature
+--> root
+```
+
+The arrow, ``-->`` points to the currently active division.
