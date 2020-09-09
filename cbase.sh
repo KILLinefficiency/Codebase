@@ -1,6 +1,6 @@
 #/bin/bash
 
-# Gets the number of commandline agruments.
+# Gets the number of commandline arguments.
 n_args=${#@}
 
 # Default colors for text.
