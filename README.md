@@ -14,7 +14,11 @@ Codebase can be cloned via ``git``:
 git clone https://www.github.com/KILLinefficiency/Codebase.git
 ```
 ### Requirements:
-Since Codebase is written in Bash Script, ``bash`` is an important requirement. Codebase also requies common Linux tools like ``ls``, ``cat``, ``awk``, etc.
+Since Codebase is written in Bash Script, ``bash`` is an important requirement. Codebase also requies common GNU+Linux tools like ``ls``, ``cat``, ``awk``, etc.
+
+Codebase works on Unik-like systems only. This includes Linux, FreeBSD and macOS. You might be able to run Codebase on WSL on a Windows machine.
+
+**Codebase has been tested only on Linux.**
 
 ### Setting Codebase up:
 The ``cbase.sh`` file in the repository is the main file containing all the code.
@@ -22,6 +26,7 @@ The ``cbase.sh`` file in the repository is the main file containing all the code
 There's also an ``install.sh`` file to automate the setting up process. ``install.sh`` makes a directory ``~/.CB`` copies ``cbase.sh`` to ``~/.CB`` as ``cbase`` and adds that directory to the PATH variable.
 
 You can also setup Codebase without using ``install.sh``:
+
 1] Copy ``cbase.sh`` as ``cbase`` because it's inconvinient to type ``.sh`` everytime you write ``cbase``.
 ```
 $ cp cbase.sh cbase
@@ -81,7 +86,7 @@ The codebase constructed is limited to the current working directory only. A dir
 
 #### destruct
 
-``destruct`` will remove the existing codebase from the current working directory.U
+``destruct`` will remove the existing codebase from the current working directory.
 
 Using ``destruct``:
 ```
@@ -110,7 +115,7 @@ hello.py
 $ cbase save file.py "a hello to the world"
 ```
 
-This will save the snapshot of the file ``hello.py`` in the directory's codebase.
+This will save a snapshot of the file ``hello.py`` in the directory's codebase.
 
 Multiple saves for multiple files can be made.
 
@@ -208,7 +213,7 @@ $ cat hello.py
 print('Hello World')
 ```
 
-The file ``hello.py`` was reverted back to a previous save, save ``2`` and then to save ``1``.
+Here, the file ``hello.py`` was reverted back to a previous save, save ``2`` and then to save ``1``.
 
 The file ``hello.py`` can be brought to the latest save, save ``3`` too.
 ```
@@ -298,14 +303,14 @@ After triggeing to another division, all the saves will be made to that division
 
 #### smoosh
 
-The divisions made can be smooshed together. It means that, changes to your code from the active division can be brought over to any other division (including ``root``).
+The divisions made can be smooshed together. It means that changes to your code from the active division can be brought over to any other division (including ``root``).
 
 Using ``smoosh``:
 ```
 $ cbase smoosh <division_name>
 ```
 
-This will smoosh the current active division withe the specified division.
+This will smoosh the current active division with the specified division.
 
 Like,
 ```
@@ -313,7 +318,7 @@ $ echo "print([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])" > numbers.py
 
 $ cbase save numbers.py "0 to 10"
 
-$ cat numberrs.py
+$ cat numbers.py
 print([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
 $ cbase div update
@@ -346,7 +351,7 @@ $ cat numbers.py
 print(list(range(0, 11)))
 ```
 
-Here the ``numbers.py`` file from the ``root`` division was modified in the ``update`` division. The ``update`` division was then smooshed with the ``root`` division. This resulted into applying the changes from the ``update`` division to the ``root`` division so that the ``numbers.py`` file from both division become same everywhere.
+Here, the ``numbers.py`` file from the ``root`` division was modified in the ``update`` division. The ``update`` division was then smooshed with the ``root`` division. This resulted into applying the changes from the ``update`` division to the ``root`` division so that the ``numbers.py`` file from both division become same everywhere.
 
 #### cut
 
