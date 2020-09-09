@@ -1,10 +1,13 @@
 #/bin/bash
 
+# Gets the number of commandline agruments.
+n_args=${#@}
+
 # Default colors for text.
 DEFAULT="\e[00;39m"
 DEFAULT_BOLD="\e[01;39m"
 
-# Colors for displaying special text like, Save ID, Division name, etc.
+# Colors for displaying special text like Save ID, Division name, etc.
 RED="\e[01;31m"
 GREEN="\e[01;32m"
 YELLOW="\e[01;33m"
@@ -82,7 +85,7 @@ if [ "$1" == "construct" ]; then
 fi
 
 # Creates a new division.
-if [ "$1" == "div" ]; then
+if [ "$1" == "div" ] && [ $n_args -eq 2 ]; then
 	# Warns if the specified division is already present.
 	if [ -d .codebase/$2 ]; then
 		printf "\nThe division ${CYAN}$2${DEFAULT} already exists.\nSwitch to it using:\n\n\t${GREEN}cbase trigger $2${DEFAULT}\n\n"
@@ -98,7 +101,7 @@ if [ "$1" == "ndiv" ]; then
 	# Gets all the directories.
 	for divs in $(ls -F .codebase | grep "/"); do
 		if [ "$DIVISION/" == "$divs" ]; then
-			# For active divisions.
+			# For active division.
 			echo -e "${RED}-->${CYAN} ${divs//'/'/''}${DEFAULT}"
 		else
 			# For other divisions.
@@ -108,7 +111,7 @@ if [ "$1" == "ndiv" ]; then
 fi
 
 # Switches to a specified division.
-if [ "$1" == "trigger" ]; then
+if [ "$1" == "trigger" ] && [ $n_args -eq 2 ]; then
 	if [ -d .codebase/$2 ]; then
 		# Gets information about the previous division.
 		PREVIOUS_DIV=$(cat .codebase/division)
@@ -117,12 +120,13 @@ if [ "$1" == "trigger" ]; then
 		DIVISION=$(cat .codebase/division)
 		total_saves=$(($(cat .codebase/$2/save_count) - 1))
 		# Removes all the files from the project directory belonging to the previous division.
+		# Uses awk to get the names of the files from the .txt files.
 		for kill_div in $(seq $previous_div_total_saves); do
 			rm -f $(awk '{print $1}' .codebase/$PREVIOUS_DIV/"$kill_div"-info.txt)
 		done
 		# Populates the project directory with files belonging to the triggered division.
 		for switch_div in $(seq $total_saves); do
-			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/"$switch_div"-info.txt)
+			cat .codebase/$DIVISION/$switch_div > $(awk '{print $1}' .codebase/$DIVISION/${switch_div}-info.txt)
 		done
 	else
 		# Warns id the specified division is not found.
@@ -132,7 +136,7 @@ if [ "$1" == "trigger" ]; then
 fi
 
 # Deletes an entire division.
-if [ "$1" == "cut" ]; then
+if [ "$1" == "cut" ] && [ $n_args -eq 2 ]; then
 	# Does not allow the user to cut the root division.
 	if [ "$2" != "root" ]; then
 		read -p "Are you sure you want to cut \"$2\" division? [y/N] " cut_div
@@ -153,7 +157,7 @@ if [ "$1" == "cut" ]; then
 fi
 
 # Smooshes two divisions together.
-if [ "$1" == "smoosh" ]; then
+if [ "$1" == "smoosh" ] && [ $n_args -eq 2 ]; then
 	if [ -d .codebase/$2 ]; then
 		cp .codebase/$DIVISION/* .codebase/$2
 	else
@@ -174,19 +178,24 @@ if [ "$1" == "destruct" ]; then
 	fi
 fi
 
-if [ "$1" == "save" ]; then
+# Saves the specified file with a unique Save ID and optionally given save message in the active division.
+if [ "$1" == "save" ] && [ $n_args -ge 2 ]; then
 	if [ -e $2 ]; then
 		SAVE=$(cat .codebase/$DIVISION/save_count)
+		# Saves the file with Save ID.
 		cat $2 > .codebase/$DIVISION/$SAVE
+		# Saves the name of the file and the save message in a .txt file.
 		echo -e "$2 : $3" > .codebase/$DIVISION/$SAVE-info.txt
+		# Increments the Save IDs by one.
 		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
 	else
+		# Warns if the specified file is not found.
 		echo -e "The file ${BLUE}$2${DEFAULT} does not exist."
 	fi
 fi
 
 # Goes back to the version of a file specified by a Save ID.
-if [ "$1" == "goto" ]; then
+if [ "$1" == "goto" ] && [ $n_args -eq 2 ]; then
 	total_save_files=$(($(cat .codebase/$DIVISION/save_count) - 1))
 	if [ $2 -le $total_save_files ]; then
 		# Reads the file name using awk and redirects the contents to it after reading it from the file by the name of the Save ID.
@@ -197,7 +206,7 @@ if [ "$1" == "goto" ]; then
 	fi
 fi
 
-# Shows the history of all the saves belonging to the active division.
+# Shows the history and information of all the saves belonging to the active division.
 if [ "$1" == "history" ]; then
 	FILES=$(($(cat .codebase/$DIVISION/save_count) - 1))
 	printf "\n${GREEN}Save History:${DEFAULT}\n\n"
