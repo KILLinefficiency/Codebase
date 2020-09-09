@@ -194,6 +194,7 @@ if [ "$1" == "save" ] && [ $n_args -ge 2 ]; then
 		echo -e "$2 : $3" > .codebase/$DIVISION/$SAVE-info.txt
 		# Increments the Save IDs by one.
 		echo "$((SAVE + 1))" > .codebase/$DIVISION/save_count
+		echo -e "Saved ${BLUE}$2${DEFAULT} to ${CYAN}$DIVISION${DEFAULT} division."
 	else
 		# Warns if the specified file is not found.
 		echo -e "The file ${BLUE}$2${DEFAULT} does not exist."
