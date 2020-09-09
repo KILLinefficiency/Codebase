@@ -87,12 +87,14 @@ fi
 # Creates a new division.
 if [ "$1" == "div" ] && [ $n_args -eq 2 ]; then
 	# Warns if the specified division is already present.
-	if [ -d .codebase/$2 ]; then
-		printf "\nThe division ${CYAN}$2${DEFAULT} already exists.\nSwitch to it using:\n\n\t${GREEN}cbase trigger $2${DEFAULT}\n\n"
+	div_name=$2
+	div_name=${div_name//'/'/'_'}
+	if [ -d .codebase/$div_name ]; then
+		printf "\nThe division ${CYAN}$div_name${DEFAULT} already exists.\nSwitch to it using:\n\n\t${GREEN}cbase trigger $div_name${DEFAULT}\n\n"
 	else
 		# Copies the contents of the active division to the newly created division.
-		mkdir .codebase/$2
-		cp .codebase/$DIVISION/* .codebase/$2
+		mkdir .codebase/$div_name
+		cp .codebase/$DIVISION/* .codebase/$div_name
 	fi
 fi
 
@@ -143,8 +145,11 @@ if [ "$1" == "cut" ] && [ $n_args -eq 2 ]; then
 		if [ -z $cut_div ]; then
 			exit
 		elif [ "$cut_div" == "y" ] || [ "$cut_div" == "Y" ]; then
-			# Deletes the specified division.
-			rm -rf .codebase/$2
+			# Checks if the specified argument is a directory or not.
+			if [ -d .codebase/$2 ]; then
+				# Deletes the specified division.
+				rm -rf .codebase/$2
+			fi
 			# Switches to the root division.
 			echo "root" > .codebase/division
 			echo -e "You are on ${CYAN}root${DEFAULT} division now."
