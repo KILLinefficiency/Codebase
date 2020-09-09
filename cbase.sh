@@ -80,7 +80,7 @@ if [ "$1" == "construct" ]; then
 		mkdir .codebase/root
 		echo "1" > .codebase/root/save_count
 		echo "root" > .codebase/division
-		echo -e "Constructed an empty codebase at ${GREEN}$(pwd)${DEFAULT}"
+		echo -e "Constructed an empty codebase at ${GREEN}$(pwd)${DEFAULT}."
 	fi
 fi
 
@@ -173,11 +173,12 @@ fi
 
 # Destructs the entire codebase from the project directory.
 if [ "$1" == "destruct" ]; then
-	read -p "Are you sure you want to deconstruct the entire codebase? [y/N] " destruct_codebase
+	read -p "Are you sure you want to destruct the entire codebase? [y/N] " destruct_codebase
 	if [ -z $destruct_codebase ]; then
 		exit
 	elif [ "$destruct_codebase" == "y" ] || [ "$destruct_codebase" == "Y" ]; then
 		rm -rf .codebase
+		echo -e "Destructed codebase at ${GREEN}$(pwd)${DEFAULT}."
 	else
 		exit
 	fi
