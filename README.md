@@ -135,7 +135,7 @@ Like:
 $ ls
 hello.py
 
-$ cbase histoy
+$ cbase history
 
 Save History:
 
